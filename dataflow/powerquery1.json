@@ -1,0 +1,20 @@
+{
+	"name": "powerquery1",
+	"properties": {
+		"type": "WranglingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "ds_adls_to_csv",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> ds_adls_to_csv",
+					"dataset": {
+						"referenceName": "ds_adls_to_csv",
+						"type": "DatasetReference"
+					}
+				}
+			],
+			"script": "section Section1;\r\nshared ds_adls_to_csv = let AdfDoc = AzureStorage.DataLakeContents(\"https://abadls.dfs.core.windows.net/raw-data/project/sales(in).csv\"),Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]), PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]) in  PromotedHeaders;\r\nshared UserQuery = let Source = #\"ds_adls_to_csv\",\r\n  #\"Removed duplicates\" = Table.Distinct(Source),\r\n  #\"Changed column type\" = Table.TransformColumnTypes(#\"Removed duplicates\", {{\"order_id\", Int64.Type}, {\"customer_id\", Int64.Type}}),\r\n  #\"Filtered rows\" = Table.SelectRows(#\"Changed column type\", each ([customer_id] <> null)),\r\n  #\"Changed column type 1\" = Table.TransformColumnTypes(#\"Filtered rows\", {{\"transaction_id\", Int64.Type}}) in #\"Changed column type 1\";\r\n",
+			"documentLocale": "en-us"
+		}
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"name": "ds_abadls_processeddata_parquet",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_abadls",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DAY_1"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "nov",
+				"fileSystem": "processeddata"
+			},
+			"compressionCodec": "none"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

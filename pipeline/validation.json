@@ -1,0 +1,27 @@
+{
+	"name": "validation",
+	"properties": {
+		"activities": [
+			{
+				"name": "Validation1",
+				"type": "Validation",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_json_present",
+						"type": "DatasetReference"
+					},
+					"timeout": "0.12:00:00",
+					"sleep": 10
+				}
+			}
+		],
+		"folder": {
+			"name": "DAY_2"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-11-26T06:23:55Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

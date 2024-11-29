@@ -1,0 +1,117 @@
+{
+	"name": "blob_adls_copy1",
+	"properties": {
+		"activities": [
+			{
+				"name": "JSON_to_Parquet",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobStorageReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_ashtraining24_rawfiles",
+						"type": "DatasetReference",
+						"parameters": {
+							"input_json": {
+								"value": "@pipeline().parameters.file_ip",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_abadls_processeddata_parquet",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Delete_file_source",
+				"type": "Delete",
+				"dependsOn": [
+					{
+						"activity": "JSON_to_Parquet",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_ashtraining24_rawfiles",
+						"type": "DatasetReference",
+						"parameters": {
+							"input_json": {
+								"value": "@pipeline().parameters.file_ip",
+								"type": "Expression"
+							}
+						}
+					},
+					"logStorageSettings": {
+						"linkedServiceName": {
+							"referenceName": "ls_abadls",
+							"type": "LinkedServiceReference"
+						},
+						"path": "processeddata/logs"
+					},
+					"enableLogging": true,
+					"storeSettings": {
+						"type": "AzureBlobStorageReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					}
+				}
+			}
+		],
+		"parameters": {
+			"file_ip": {
+				"type": "String"
+			}
+		},
+		"folder": {
+			"name": "DAY_2"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-11-26T04:46:33Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

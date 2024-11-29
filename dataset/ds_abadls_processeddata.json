@@ -1,0 +1,23 @@
+{
+	"name": "ds_abadls_processeddata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ds_abadls_processdata_parquet",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "DAY_1"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "nov",
+				"fileSystem": "processeddata"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
